@@ -1,0 +1,16 @@
+.appBar {
+  background-color: #19181a !important;
+}
+
+.customButton {
+  background-color: #36d286;
+  text-transform: none;
+}
+
+.customButton:hover {
+  background-color: #2bb673;
+}
+
+.MuiAppBar-root {
+  background-color: #19181a !important;
+}
