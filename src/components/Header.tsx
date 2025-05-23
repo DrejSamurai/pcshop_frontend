@@ -8,13 +8,14 @@ import './styles/header.css'
 
 
 const navLinks = [
-  { label: 'GPUs', path: '/gpus' },
-  { label: 'CPUs', path: '/cpus' },
-  { label: 'Motherboards', path: '/motherboards' },
-  { label: 'Coolers', path: '/coolers' },
-  { label: 'Cases', path: '/cases' },
+  { label: 'GPU', path: '/gpus' },
+  { label: 'CPU', path: '/cpus' },
+  { label: 'Motherboard', path: '/motherboards' },
+  { label: 'Cooler', path: '/coolers' },
+  { label: 'Case', path: '/cases' },
   { label: 'Storage', path: '/storage' },
   { label: 'Memory', path: '/memory' },
+   { label: 'Power Supply', path: '/powersupply' },
 ];
 
 const Header = () => {
