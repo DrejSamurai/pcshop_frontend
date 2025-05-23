@@ -1,0 +1,24 @@
+.gpu-table-container {
+  background-color: #2e2e31 !important; 
+}
+
+.gpu-table {
+  color: white;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.gpu-table-header-row {
+  background-color: #222225;
+}
+
+.gpu-table-cell {
+  color: white !important;
+  border-bottom: 1px solid #444;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.gpu-table-text {
+  color: white !important;
+}

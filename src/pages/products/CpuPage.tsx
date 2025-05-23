@@ -62,7 +62,7 @@ const ProductPage = () => {
         </Box>
 
         <Box flexGrow={1}>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} className="gpu-table-container">
             <Table>
               <TableHead>
                 <TableRow>
@@ -76,13 +76,13 @@ const ProductPage = () => {
                   <TableRow key={product.id}>
                     <TableCell>
                       <img
-                        src={`http://localhost:3000/image-proxy?url=${encodeURIComponent(product.image)}`}
+                        src={ProductService.getProxiedImageUrl(product.image)}
                         alt={product.title}
                         style={{ width: 80, height: 60, objectFit: 'cover' }}
                       />
                     </TableCell>
                     <TableCell>
-                      <Typography noWrap>
+                      <Typography noWrap style={{ color: 'inherit' }}>
                        {product.title}
                       </Typography>
                     </TableCell>

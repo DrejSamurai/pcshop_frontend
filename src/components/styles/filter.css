@@ -1,0 +1,47 @@
+.sidebar {
+  padding: 16px; 
+  width: 250px;
+  border-radius: 16px; 
+  background-color: #1b352c; 
+  color: white;
+}
+
+.sidebar .MuiTypography-root {
+  color: white; 
+}
+
+.sidebar .MuiTextField-root input {
+  color: white; 
+}
+
+.sidebar .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: white; 
+}
+
+.sidebar .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: white;
+}
+
+.sidebar .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: white;
+}
+
+.sidebar .MuiInputLabel-root {
+  color: white; 
+}
+
+.sidebar .MuiSlider-root {
+  color: white; 
+}
+
+.sidebar .MuiFormControlLabel-root {
+  color: white; 
+}
+
+.sidebar .MuiCheckbox-root {
+  color: white; 
+}
+
+.sidebar .MuiCheckbox-root.Mui-checked {
+  color: white; 
+}

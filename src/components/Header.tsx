@@ -1,12 +1,22 @@
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import { Link } from 'react-router-dom'
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import './styles/header.css'
+import './styles/header.css';
 
+// Manual icon imports
+import gpuIcon from '../assets/gpu.png';
+import cpuIcon from '../assets/cpu.png';
+import motherboardIcon from '../assets/motherboard.png';
+import coolerIcon from '../assets/cooler.png';
+import caseIcon from '../assets/case.png';
+import storageIcon from '../assets/storage.png';
+import memoryIcon from '../assets/ram.png';
+import powersupplyIcon from '../assets/power supply.png';
 
+// Nav links
 const navLinks = [
   { label: 'GPU', path: '/gpus' },
   { label: 'CPU', path: '/cpus' },
@@ -15,8 +25,24 @@ const navLinks = [
   { label: 'Case', path: '/cases' },
   { label: 'Storage', path: '/storage' },
   { label: 'Memory', path: '/memory' },
-   { label: 'Power Supply', path: '/powersupply' },
+  { label: 'Power Supply', path: '/powersupply' },
 ];
+
+// Map label -> icon
+const iconMap: Record<string, string> = {
+  gpu: gpuIcon,
+  cpu: cpuIcon,
+  motherboard: motherboardIcon,
+  cooler: coolerIcon,
+  case: caseIcon,
+  storage: storageIcon,
+  memory: memoryIcon,
+  powersupply: powersupplyIcon,
+};
+
+const getIconSrc = (label: string): string | undefined => {
+  return iconMap[label.replace(/\s+/g, '').toLowerCase()];
+};
 
 const Header = () => {
   return (
@@ -29,17 +55,32 @@ const Header = () => {
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 2 }}>
-          {navLinks.map((link) => (
-            <Button
-              key={link.label}
-              color="inherit"
-              component={Link}
-              to={link.path}
-              sx={{ textTransform: 'none' }}
-            >
-              {link.label}
-            </Button>
-          ))}
+          {navLinks.map((link) => {
+            const iconSrc = getIconSrc(link.label);
+            return (
+              <Button
+                key={link.label}
+                color="inherit"
+                component={Link}
+                to={link.path}
+                sx={{ textTransform: 'none', display: 'flex', alignItems: 'center', gap: 1 }}
+              >
+                {iconSrc && (
+                  <img
+                    src={iconSrc}
+                    alt={link.label}
+                    style={{
+                    width: 50,
+                    height: 50,
+                    objectFit: 'contain',
+                    filter: 'invert(1) sepia(1) saturate(5) hue-rotate(180deg)' 
+                }}
+                  />
+                )}
+                {link.label}
+              </Button>
+            );
+          })}
         </Box>
 
         <Box>

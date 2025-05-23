@@ -10,9 +10,12 @@ import CasePage from './pages/products/CasePage';
 import MemoryPage from './pages/products/MemoryPage';
 import StoragePage from './pages/products/StoragePage';
 import PowerSupplyPage from './pages/products/PowerSupplyPage';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme.js';
 
 function App() {
   return (
+     <ThemeProvider theme={theme}>
   <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
@@ -26,6 +29,7 @@ function App() {
          <Route path='powersupply'  element={<PowerSupplyPage/>} />
       </Route>
     </Routes>
+    </ThemeProvider>
   )
 }
 

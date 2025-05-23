@@ -3,12 +3,12 @@
 }
 
 .customButton {
-  background-color: #36d286;
+  background-color: #36d286 !important;
   text-transform: none;
 }
 
 .customButton:hover {
-  background-color: #2bb673;
+  background-color: #2bb673 !important;
 }
 
 .MuiAppBar-root {
