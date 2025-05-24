@@ -10,12 +10,12 @@ import CasePage from './pages/products/CasePage';
 import MemoryPage from './pages/products/MemoryPage';
 import StoragePage from './pages/products/StoragePage';
 import PowerSupplyPage from './pages/products/PowerSupplyPage';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme.js';
+import { CustomThemeProvider } from './theme/ThemeContext';
+import PCBuilderPage from './pages/PCBuilder';
 
 function App() {
   return (
-     <ThemeProvider theme={theme}>
+     <CustomThemeProvider>
   <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
@@ -27,9 +27,10 @@ function App() {
         <Route path='storage'  element={<StoragePage/>} />
         <Route path='motherboards'  element={<MotherboardPage/>} />
          <Route path='powersupply'  element={<PowerSupplyPage/>} />
+         <Route path='pcbuilder' element={<PCBuilderPage/>}/>
       </Route>
     </Routes>
-    </ThemeProvider>
+    </CustomThemeProvider>
   )
 }
 

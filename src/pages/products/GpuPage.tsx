@@ -15,6 +15,21 @@ import {
 import ProductFilterSidebar from '../../components/ProductFilterSidebar';
 import "./products.css";
 
+import anhochIcon from '../../assets/anhoch.png';
+import ddstoreIcon from '../../assets/ddstore.png';
+import zhirafa50Icon from '../../assets/zhirafa50.png';
+
+const iconMap: Record<string, string> = {
+  anhoch: anhochIcon,
+  ddstore: ddstoreIcon,
+  zhirafa50: zhirafa50Icon,
+};
+
+const getIconSrc = (label: string): string | undefined => {
+  return iconMap[label.replace(/\s+/g, '').toLowerCase()];
+};
+
+
 const GpuPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [manufacturers, setManufacturers] = useState<string[]>([]);
@@ -55,7 +70,7 @@ const GpuPage = () => {
 
   return (
     <Box sx={{ width: '90vw', py: 4, px: 2 }}>
-      <Box display="flex" gap={6}>
+      <Box display="flex" gap={8}>
         <Box sx={{ width: '250px', flexShrink: 0 }}>
           <ProductFilterSidebar
             category={filters.category}
@@ -85,7 +100,7 @@ const GpuPage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map(product => (
+                {products.map(product => ( 
                   <TableRow key={product.id} className="gpu-table-row">
                     <TableCell className="gpu-table-cell">
                       <img
@@ -100,13 +115,20 @@ const GpuPage = () => {
                       </Typography>
                     </TableCell>
                     <TableCell className="gpu-table-cell">
-                      <Typography noWrap className="gpu-table-text">
-                        {product.store}
-                      </Typography>
+                      <img
+                    src={getIconSrc(product.store)}
+                    alt={product.store}
+                    style={{
+                    width: 100,
+                    height: 100,
+                    objectFit: 'contain',
+                }}
+                  />
+                      
                     </TableCell>
                     <TableCell className="gpu-table-cell">
                       <Typography color="primary" className="gpu-table-text">
-                        {product.price}.ден
+                        <b>{product.price} ден</b>
                       </Typography>
                     </TableCell>
                   </TableRow>
