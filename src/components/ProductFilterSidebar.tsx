@@ -16,8 +16,8 @@ interface Filters {
   category: string;
   minPrice: number;
   maxPrice: number;
-  manufacturers: string[];
-  stores: string[];
+  manufacturer: string[];
+  store: string[];
   title: string;
 }
 
@@ -25,10 +25,10 @@ interface Props {
   category: string;
   minPrice: number;
   maxPrice: number;
-  manufacturers: string[];
-  selectedManufacturers: string[];
-  stores: string[];
-  selectedStores: string[];
+  manufacturer: string[];
+  selectedManufacturer: string[];
+  store: string[];
+  selectedStore: string[];
   title: string;
   onFilterChange: (filters: Filters) => void;
 }
@@ -37,10 +37,10 @@ const ProductFilterSidebar: React.FC<Props> = ({
   category,
   minPrice,
   maxPrice,
-  manufacturers,
-  selectedManufacturers,
-  stores,
-  selectedStores,
+  manufacturer,
+  selectedManufacturer,
+  store,
+  selectedStore,
   title,
   onFilterChange,
 }) => {
@@ -49,8 +49,8 @@ const ProductFilterSidebar: React.FC<Props> = ({
       category: event.target.value as string,
       minPrice,
       maxPrice,
-      manufacturers: selectedManufacturers,
-      stores: selectedStores,
+      manufacturer: selectedManufacturer,
+      store: selectedStore,
       title,
     });
   };
@@ -61,14 +61,14 @@ const ProductFilterSidebar: React.FC<Props> = ({
       category,
       minPrice: min,
       maxPrice: max,
-      manufacturers: selectedManufacturers,
-      stores: selectedStores,
+      manufacturer: selectedManufacturer,
+      store: selectedStore,
       title,
     });
   };
 
   const handleManufacturerToggle = (manufacturer: string) => {
-    let newSelected = [...selectedManufacturers];
+    let newSelected = [...selectedManufacturer];
     if (newSelected.includes(manufacturer)) {
       newSelected = newSelected.filter((m) => m !== manufacturer);
     } else {
@@ -78,14 +78,14 @@ const ProductFilterSidebar: React.FC<Props> = ({
       category,
       minPrice,
       maxPrice,
-      manufacturers: newSelected,
-      stores: selectedStores,
+      manufacturer: newSelected,
+      store: selectedStore,
       title,
     });
   };
 
   const handleStoreToggle = (store: string) => {
-    let newSelected = [...selectedStores];
+    let newSelected = [...selectedStore];
     if (newSelected.includes(store)) {
       newSelected = newSelected.filter((s) => s !== store);
     } else {
@@ -95,8 +95,8 @@ const ProductFilterSidebar: React.FC<Props> = ({
       category,
       minPrice,
       maxPrice,
-      manufacturers: selectedManufacturers,
-      stores: newSelected,
+      manufacturer: selectedManufacturer,
+      store: newSelected,
       title,
     });
   };
@@ -106,8 +106,8 @@ const ProductFilterSidebar: React.FC<Props> = ({
       category,
       minPrice,
       maxPrice,
-      manufacturers: selectedManufacturers,
-      stores: selectedStores,
+      manufacturer: selectedManufacturer,
+      store: selectedStore,
       title: event.target.value,
     });
   };
@@ -131,18 +131,18 @@ const ProductFilterSidebar: React.FC<Props> = ({
         onChange={handlePriceChange}
         valueLabelDisplay="auto"
         min={0}
-        max={20000}
+        max={571890}
         step={100}
       />
 
       <Typography sx={{ mt: 4, mb: 1 }}>Manufacturers</Typography>
       <FormGroup>
-        {manufacturers.map((manufacturer) => (
+        {manufacturer.map((manufacturer) => (
           <FormControlLabel
             key={manufacturer}
             control={
               <Checkbox
-                checked={selectedManufacturers.includes(manufacturer)}
+                checked={selectedManufacturer.includes(manufacturer)}
                 onChange={() => handleManufacturerToggle(manufacturer)}
               />
             }
@@ -153,12 +153,12 @@ const ProductFilterSidebar: React.FC<Props> = ({
 
       <Typography sx={{ mt: 4, mb: 1 }}>Stores</Typography>
       <FormGroup>
-        {stores.map((store) => (
+        {store.map((store) => (
           <FormControlLabel
             key={store}
             control={
               <Checkbox
-                checked={selectedStores.includes(store)}
+                checked={selectedStore.includes(store)}
                 onChange={() => handleStoreToggle(store)}
               />
             }

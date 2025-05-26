@@ -29,11 +29,10 @@ const getIconSrc = (label: string): string | undefined => {
   return iconMap[label.replace(/\s+/g, '').toLowerCase()];
 };
 
-
 const GpuPage = () => {
   const [products, setProducts] = useState<any[]>([]);
-  const [manufacturers, setManufacturers] = useState<string[]>([]);
-  const [stores, setStores] = useState<string[]>([]);
+  const [manufacturer, setManufacturer] = useState<string[]>([]);
+  const [store, setStore] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 10;
@@ -41,26 +40,34 @@ const GpuPage = () => {
   const [filters, setFilters] = useState({
     category: 'GPU',
     minPrice: 0,
-    maxPrice: 20000,
-    manufacturers: [] as string[],
-    stores: [] as string[],
+    maxPrice: 1000000,
+    manufacturer: [] as string[],
+    store: [] as string[],
     title: ''
   });
 
   useEffect(() => {
     ProductService.getManufacturers('GPU')
-      .then(res => setManufacturers(res.data))
+      .then(res => setManufacturer(res.data))
       .catch(console.error);
   }, []);
 
   useEffect(() => {
     ProductService.getStores()
-      .then(res => setStores(res.data))
+      .then(res => setStore(res.data))
       .catch(console.error);
   }, []);
 
   useEffect(() => {
-    ProductService.getFilteredProducts({ ...filters, page, pageSize })
+    const backendFilters = {
+      ...filters,
+      manufacturer: filters.manufacturer.join(','), 
+      store: filters.store.join(','),               
+      page,
+      pageSize,
+    };
+
+    ProductService.getFilteredProducts(backendFilters)
       .then(res => {
         setProducts(res.data);
         setTotalPages(res.data.length < pageSize ? page : page + 1);
@@ -76,10 +83,10 @@ const GpuPage = () => {
             category={filters.category}
             minPrice={filters.minPrice}
             maxPrice={filters.maxPrice}
-            manufacturers={manufacturers}
-            selectedManufacturers={filters.manufacturers}
-            stores={stores}
-            selectedStores={filters.stores}
+            manufacturer={manufacturer}
+            selectedManufacturer={filters.manufacturer}
+            store={store}
+            selectedStore={filters.store}
             title={filters.title}
             onFilterChange={(newFilters) => {
               setFilters(newFilters);
@@ -89,53 +96,58 @@ const GpuPage = () => {
         </Box>
 
         <Box flexGrow={1}>
-          <TableContainer component={Paper} className="gpu-table-container">
-            <Table className="gpu-table">
-              <TableHead>
-                <TableRow className="gpu-table-header-row">
-                  <TableCell className="gpu-table-cell">Image</TableCell>
-                  <TableCell className="gpu-table-cell">Title</TableCell>
-                  <TableCell className="gpu-table-cell">Store</TableCell>
-                  <TableCell className="gpu-table-cell">Price</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {products.map(product => ( 
-                  <TableRow key={product.id} className="gpu-table-row">
-                    <TableCell className="gpu-table-cell">
-                      <img
-                        src={ProductService.getProxiedImageUrl(product.image)}
-                        alt={product.title}
-                        style={{ width: 100, height: 100, objectFit: 'cover' }}
-                      />
-                    </TableCell>
-                    <TableCell className="gpu-table-cell">
-                      <Typography noWrap className="gpu-table-text">
-                        <b>{product.title}</b>
-                      </Typography>
-                    </TableCell>
-                    <TableCell className="gpu-table-cell">
-                      <img
-                    src={getIconSrc(product.store)}
-                    alt={product.store}
-                    style={{
-                    width: 100,
-                    height: 100,
-                    objectFit: 'contain',
+          {products.length === 0 ? (
+  <Typography align="center" sx={{ py: 8, fontSize: '1.2rem', fontWeight: 'bold' }}>
+    No products found matching your filters!
+  </Typography>
+) : (
+  <TableContainer component={Paper} className="gpu-table-container">
+    <Table className="gpu-table">
+      <TableHead>
+        <TableRow className="gpu-table-header-row">
+          <TableCell className="gpu-table-cell">Image</TableCell>
+          <TableCell className="gpu-table-cell">Title</TableCell>
+          <TableCell className="gpu-table-cell">Store</TableCell>
+          <TableCell className="gpu-table-cell">Price</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {products.map(product => (
+          <TableRow key={product.id} className="gpu-table-row">
+            <TableCell className="gpu-table-cell">
+              <img
+                src={ProductService.getProxiedImageUrl(product.image)}
+                alt={product.title}
+                style={{ width: 100, height: 100, objectFit: 'cover' }}
+              />
+            </TableCell>
+            <TableCell className="gpu-table-cell">
+              <Typography noWrap className="gpu-table-text">
+                <b>{product.title}</b>
+              </Typography>
+            </TableCell>
+            <TableCell className="gpu-table-cell">
+              <img
+                src={getIconSrc(product.store)}
+                alt={product.store}
+                style={{
+                  width: 100,
+                  height: 100,
+                  objectFit: 'contain',
                 }}
-                  />
-                      
-                    </TableCell>
-                    <TableCell className="gpu-table-cell">
-                      <Typography color="primary" className="gpu-table-text">
-                        <b>{product.price} ден</b>
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              />
+            </TableCell>
+            <TableCell className="gpu-table-cell">
+              <Typography color="primary" className="gpu-table-text">
+                <b>{product.price} ден</b>
+              </Typography>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+)}
 
           {totalPages > 1 && (
             <Box mt={4} display="flex" justifyContent="center">

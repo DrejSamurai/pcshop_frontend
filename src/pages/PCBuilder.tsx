@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import './PCBuilderPage.scss'; 
-
+import photo from './photo.svg'
 const components = [
   { label: 'Матична плоча', id: 'motherboard' },
   { label: 'Процесор', id: 'cpu' },
@@ -29,7 +29,7 @@ const PCBuilderPage = () => {
         ))}
 
         <Grid item xs={12} className="case-illustration">
-          <img src="/images/case-outline.png" alt="Case Outline" className="case-image" />
+          <img src={photo} alt="Case Outline" className="case-image" />
         </Grid>
       </Grid>
 
