@@ -130,7 +130,7 @@ const ProductFilterSidebar: React.FC<Props> = ({
         value={[minPrice, maxPrice]}
         onChange={handlePriceChange}
         valueLabelDisplay="auto"
-        min={0}
+        min={1}
         max={571890}
         step={100}
       />
