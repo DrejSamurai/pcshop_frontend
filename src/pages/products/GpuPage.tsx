@@ -61,16 +61,17 @@ const GpuPage = () => {
   useEffect(() => {
     const backendFilters = {
       ...filters,
-      manufacturer: filters.manufacturer.join(','), 
-      store: filters.store.join(','),               
+      manufacturer: filters.manufacturer.join(','),
+      store: filters.store.join(','),
       page,
       pageSize,
     };
 
     ProductService.getFilteredProducts(backendFilters)
-      .then(res => {
-        setProducts(res.data);
-        setTotalPages(res.data.length < pageSize ? page : page + 1);
+      .then(response => {
+    const payload = response.data; 
+        setProducts(payload.data || []);
+        setTotalPages(Math.ceil((payload.totalCount || 0) / pageSize));
       })
       .catch(console.error);
   }, [filters, page]);
@@ -97,57 +98,57 @@ const GpuPage = () => {
 
         <Box flexGrow={1}>
           {products.length === 0 ? (
-  <Typography align="center" sx={{ py: 8, fontSize: '1.2rem', fontWeight: 'bold' }}>
-    No products found matching your filters!
-  </Typography>
-) : (
-  <TableContainer component={Paper} className="gpu-table-container">
-    <Table className="gpu-table">
-      <TableHead>
-        <TableRow className="gpu-table-header-row">
-          <TableCell className="gpu-table-cell">Image</TableCell>
-          <TableCell className="gpu-table-cell">Title</TableCell>
-          <TableCell className="gpu-table-cell">Store</TableCell>
-          <TableCell className="gpu-table-cell">Price</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {products.map(product => (
-          <TableRow key={product.id} className="gpu-table-row">
-            <TableCell className="gpu-table-cell">
-              <img
-                src={ProductService.getProxiedImageUrl(product.image)}
-                alt={product.title}
-                style={{ width: 100, height: 100, objectFit: 'cover' }}
-              />
-            </TableCell>
-            <TableCell className="gpu-table-cell">
-              <Typography noWrap className="gpu-table-text">
-                <b>{product.title}</b>
-              </Typography>
-            </TableCell>
-            <TableCell className="gpu-table-cell">
-              <img
-                src={getIconSrc(product.store)}
-                alt={product.store}
-                style={{
-                  width: 100,
-                  height: 100,
-                  objectFit: 'contain',
-                }}
-              />
-            </TableCell>
-            <TableCell className="gpu-table-cell">
-              <Typography color="primary" className="gpu-table-text">
-                <b>{product.price} ден</b>
-              </Typography>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-)}
+            <Typography align="center" sx={{ py: 8, fontSize: '1.2rem', fontWeight: 'bold' }}>
+              No products found matching your filters!
+            </Typography>
+          ) : (
+            <TableContainer component={Paper} className="gpu-table-container">
+              <Table className="gpu-table">
+                <TableHead>
+                  <TableRow className="gpu-table-header-row">
+                    <TableCell className="gpu-table-cell">Image</TableCell>
+                    <TableCell className="gpu-table-cell">Title</TableCell>
+                    <TableCell className="gpu-table-cell">Store</TableCell>
+                    <TableCell className="gpu-table-cell">Price</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {products.map(product => (
+                    <TableRow key={product.id} className="gpu-table-row">
+                      <TableCell className="gpu-table-cell">
+                        <img
+                          src={ProductService.getProxiedImageUrl(product.image)}
+                          alt={product.title}
+                          style={{ width: 100, height: 100, objectFit: 'cover' }}
+                        />
+                      </TableCell>
+                      <TableCell className="gpu-table-cell">
+                        <Typography noWrap className="gpu-table-text">
+                          <b>{product.title}</b>
+                        </Typography>
+                      </TableCell>
+                      <TableCell className="gpu-table-cell">
+                        <img
+                          src={getIconSrc(product.store)}
+                          alt={product.store}
+                          style={{
+                            width: 100,
+                            height: 100,
+                            objectFit: 'contain',
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell className="gpu-table-cell">
+                        <Typography color="primary" className="gpu-table-text">
+                          <b>{product.price} ден</b>
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
 
           {totalPages > 1 && (
             <Box mt={4} display="flex" justifyContent="center">
