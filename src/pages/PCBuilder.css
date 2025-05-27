@@ -1,0 +1,42 @@
+.pc-builder-container {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pc-builder-paper {
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  width: 100%;
+  max-width: 1200px; 
+  min-width: 800px; 
+}
+
+.pc-builder-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.pc-builder-cell {
+  background-color: #011627;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+.pc-builder-td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.pc-builder-add-button {
+  background-color: #36d286 !important;
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

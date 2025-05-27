@@ -1,10 +1,11 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import './styles/header.css';
+import { useEffect, useState } from 'react';
 
 import gpuIcon from '../assets/gpu.png';
 import cpuIcon from '../assets/cpu.png';
@@ -43,6 +44,24 @@ const getIconSrc = (label: string): string | undefined => {
 };
 
 const Header = () => {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/');
+  };
+
+  const handleBuildComputer = () => {
+    navigate('/pcbuilder')
+  }
+
   return (
     <AppBar position="static" className="AppBar">
       <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -68,11 +87,11 @@ const Header = () => {
                     src={iconSrc}
                     alt={link.label}
                     style={{
-                    width: 50,
-                    height: 50,
-                    objectFit: 'contain',
-                    filter: 'invert(1) sepia(1) saturate(5) hue-rotate(180deg)' 
-                }}
+                      width: 50,
+                      height: 50,
+                      objectFit: 'contain',
+                      filter: 'invert(1) sepia(1) saturate(5) hue-rotate(180deg)',
+                    }}
                   />
                 )}
                 {link.label}
@@ -82,16 +101,39 @@ const Header = () => {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <ThemeToggleButton /> 
-          <Button
-            variant="contained"
-            className="customButton"
-            component={Link}
-            to="/configure"
-            sx={{ textTransform: 'none' }}
-          >
-            Sign In
-          </Button>
+          {isLoggedIn ? (
+            <Button
+              variant="contained"
+              className="customButton"
+              onClick={handleBuildComputer}
+              sx={{ textTransform: 'none' }}
+            >
+              Build Computer
+            </Button>
+          ) : (
+          <></>
+          )}
+          <ThemeToggleButton />
+          {isLoggedIn ? (
+            <Button
+              variant="contained"
+              className="customButton"
+              onClick={handleLogout}
+              sx={{ textTransform: 'none' }}
+            >
+              Log Out
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="customButton"
+              component={Link}
+              to="/login"
+              sx={{ textTransform: 'none' }}
+            >
+              Sign In
+            </Button>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
