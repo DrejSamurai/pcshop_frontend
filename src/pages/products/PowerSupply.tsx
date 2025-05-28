@@ -34,7 +34,7 @@ const getIconSrc = (label: string): string | undefined => {
 type SortField = 'price' | 'title' | '';
 type SortDirection = 'asc' | 'desc';
 
-const StoragePage = () => {
+const PowerSupplyPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [manufacturer, setManufacturer] = useState<string[]>([]);
   const [store, setStore] = useState<string[]>([]);
@@ -43,7 +43,7 @@ const StoragePage = () => {
   const pageSize = 10;
 
   const [filters, setFilters] = useState({
-    category: 'Hard Drive',
+    category: 'Power Supply',
     minPrice: 1,
     maxPrice: 1000000,
     manufacturer: [] as string[],
@@ -210,4 +210,4 @@ const StoragePage = () => {
   );
 };
 
-export default StoragePage;
+export default PowerSupplyPage;

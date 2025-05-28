@@ -9,7 +9,16 @@ export interface Configuration {
 
 export interface Product {
   id: number;
-  name: string;
+  title: string;
+  price: number;
+  description?: string;
+  category?: string;
+  code?: string;
+  image?: string;
+  link?: string;
+  manufacturer?: string;
+  store?: string;
+  warranty?: number;
 }
 
 const ConfigurationService = {

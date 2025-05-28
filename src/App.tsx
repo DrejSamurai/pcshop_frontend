@@ -9,6 +9,12 @@ import { CustomThemeProvider } from './theme/ThemeContext';
 import PCBuilderPage from './pages/PCBuilder';
 import LoginPage from './pages/login';
 import Register from './pages/register';
+import CpuPage from './pages/products/CpuPage';
+import MotherboardPage from './pages/products/MotherboardPage';
+import CoolerPage from './pages/products/CoolerPage';
+import CasePage from './pages/products/CasePage';
+import MemoryPage from './pages/products/MemoryPage';
+import PowerSupplyPage from './pages/products/PowerSupply';
 
 function App() {
   return (
@@ -17,7 +23,13 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />   
         <Route path='gpus'  element={<GpuPage/>} />
+        <Route path='cpus'  element={<CpuPage/>} />
+        <Route path='motherboards'  element={<MotherboardPage/>} />
+        <Route path='coolers'  element={<CoolerPage/>} />
         <Route path='storage'  element={<StoragePage/>} />
+         <Route path='cases'  element={<CasePage/>} />
+          <Route path='memory'  element={<MemoryPage/>} />
+          <Route path='powersupply'  element={<PowerSupplyPage/>} />
          <Route path='pcbuilder' element={<PCBuilderPage/>}/>
          <Route path="/product/:id" element={<ProductDetailsPage />} />
       </Route>

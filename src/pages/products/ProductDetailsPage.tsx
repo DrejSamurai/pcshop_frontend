@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ProductService from '../../services/ProductsService';
-import { searchYouTube } from '../../services/YouTubeService'; // your backend YouTube API call
+import ConfigurationService from '../../services/ConfigurationService'; // Import your config service
+import { searchYouTube } from '../../services/YouTubeService'; 
 import {
   Box,
   Typography,
@@ -11,6 +12,14 @@ import {
   Card,
   CardMedia,
   CardContent,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 
 const ProductDetailsPage = () => {
@@ -20,7 +29,18 @@ const ProductDetailsPage = () => {
   const [videos, setVideos] = useState<any[]>([]);
   const [videosLoading, setVideosLoading] = useState(false);
 
-  // Fetch product by ID
+  // New state for dialog and config selection
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [configs, setConfigs] = useState<any[]>([]);
+  const [selectedConfig, setSelectedConfig] = useState<string>("");
+  const [addLoading, setAddLoading] = useState(false);
+  const [addMessage, setAddMessage] = useState<string | null>(null);
+
+  // Assume you have userID or get it from localStorage/token
+  const token = localStorage.getItem("token") || "";
+  const user = token ? JSON.parse(atob(token.split(".")[1])) : null;
+  const userID = user?.sub ? Number(user.sub) : null;
+
   useEffect(() => {
     if (!id) return;
     setLoading(true);
@@ -32,7 +52,6 @@ const ProductDetailsPage = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // Fetch YouTube videos when product.title changes
   useEffect(() => {
     if (!product?.title) return;
 
@@ -52,6 +71,38 @@ const ProductDetailsPage = () => {
 
     fetchVideos();
   }, [product?.title]);
+
+  // Load configurations for the user when dialog opens
+  useEffect(() => {
+    if (dialogOpen && userID) {
+      ConfigurationService.getByUser(userID)
+        .then(setConfigs)
+        .catch((err) => {
+          console.error("Failed to load configurations", err);
+          setConfigs([]);
+        });
+    }
+  }, [dialogOpen, userID]);
+
+  const handleAddProductToConfig = async () => {
+    if (!selectedConfig || !product?.id) return;
+
+    setAddLoading(true);
+    setAddMessage(null);
+    try {
+      const response = await ConfigurationService.addProduct(
+        Number(selectedConfig),
+        product.id
+      );
+      setAddMessage(response.message || "Product added successfully.");
+      setDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to add product to configuration", error);
+      setAddMessage("Failed to add product to configuration.");
+    } finally {
+      setAddLoading(false);
+    }
+  };
 
   if (loading) return <CircularProgress />;
   if (!product) return <Typography>Product not found</Typography>;
@@ -126,16 +177,27 @@ const ProductDetailsPage = () => {
           <Typography variant="h6" sx={{ mt: 1 }}>
             Price: <strong>{product.price} MKD</strong>
           </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            href={product.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ textTransform: 'none', px: 4, py: 1, mt: 2, alignSelf: 'flex-start' }}
-          >
-            To {product.store}
-          </Button>
+          <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              href={product.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ textTransform: 'none', px: 4, py: 1 }}
+            >
+              To {product.store}
+            </Button>
+
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setDialogOpen(true)}
+              sx={{ textTransform: 'none', px: 4, py: 1 }}
+            >
+              Add to Configuration
+            </Button>
+          </Box>
         </Box>
       </Box>
 
@@ -174,6 +236,43 @@ const ProductDetailsPage = () => {
           ))}
         </Grid>
       </Box>
+
+      {/* Add to Configuration Dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>Select Configuration</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            <InputLabel id="config-select-label">Configuration</InputLabel>
+            <Select
+              labelId="config-select-label"
+              value={selectedConfig}
+              label="Configuration"
+              onChange={(e) => setSelectedConfig(e.target.value)}
+            >
+              {configs.map((cfg) => (
+                <MenuItem key={cfg.id} value={cfg.id.toString()}>
+                  {cfg.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {addMessage && (
+            <Typography sx={{ mt: 2 }} color={addMessage.includes("Failed") ? "error" : "success.main"}>
+              {addMessage}
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={handleAddProductToConfig}
+            disabled={!selectedConfig || addLoading}
+          >
+            {addLoading ? "Adding..." : "Add"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
