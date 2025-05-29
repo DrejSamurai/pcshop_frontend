@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ProductService from '../../services/ProductsService';
-import ConfigurationService from '../../services/ConfigurationService'; // Import your config service
-import { searchYouTube } from '../../services/YouTubeService'; 
+import ConfigurationService from '../../services/ConfigurationService';
+import { searchYouTube } from '../../services/YouTubeService';
 import {
   Box,
   Typography,
@@ -28,18 +28,18 @@ const ProductDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState<any[]>([]);
   const [videosLoading, setVideosLoading] = useState(false);
-
-  // New state for dialog and config selection
   const [dialogOpen, setDialogOpen] = useState(false);
   const [configs, setConfigs] = useState<any[]>([]);
-  const [selectedConfig, setSelectedConfig] = useState<string>("");
+  const [selectedConfig, setSelectedConfig] = useState<string>('');
   const [addLoading, setAddLoading] = useState(false);
   const [addMessage, setAddMessage] = useState<string | null>(null);
 
-  // Assume you have userID or get it from localStorage/token
-  const token = localStorage.getItem("token") || "";
-  const user = token ? JSON.parse(atob(token.split(".")[1])) : null;
+  const token = localStorage.getItem('token') || '';
+  const user = token ? JSON.parse(atob(token.split('.')[1])) : null;
   const userID = user?.sub ? Number(user.sub) : null;
+
+  const truncateText = (text: string, maxLength: number) =>
+    text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 
   useEffect(() => {
     if (!id) return;
@@ -72,13 +72,12 @@ const ProductDetailsPage = () => {
     fetchVideos();
   }, [product?.title]);
 
-  // Load configurations for the user when dialog opens
   useEffect(() => {
     if (dialogOpen && userID) {
       ConfigurationService.getByUser(userID)
         .then(setConfigs)
         .catch((err) => {
-          console.error("Failed to load configurations", err);
+          console.error('Failed to load configurations', err);
           setConfigs([]);
         });
     }
@@ -94,11 +93,11 @@ const ProductDetailsPage = () => {
         Number(selectedConfig),
         product.id
       );
-      setAddMessage(response.message || "Product added successfully.");
+      setAddMessage(response.message || 'Product added successfully.');
       setDialogOpen(false);
     } catch (error) {
-      console.error("Failed to add product to configuration", error);
-      setAddMessage("Failed to add product to configuration.");
+      console.error('Failed to add product to configuration', error);
+      setAddMessage('Failed to add product to configuration.');
     } finally {
       setAddLoading(false);
     }
@@ -148,7 +147,9 @@ const ProductDetailsPage = () => {
               maxHeight: 400,
             }}
           />
-          <Typography>Product Info:</Typography>
+          <Typography variant="h6" fontWeight="bold">
+            Product Info:
+          </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ whiteSpace: 'pre-line' }}>
             {product.description}
           </Typography>
@@ -177,26 +178,38 @@ const ProductDetailsPage = () => {
           <Typography variant="h6" sx={{ mt: 1 }}>
             Price: <strong>{product.price} MKD</strong>
           </Typography>
-          <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+          <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
             <Button
-              variant="contained"
-              color="primary"
-              href={product.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ textTransform: 'none', px: 4, py: 1 }}
-            >
-              To {product.store}
-            </Button>
+  variant="contained"
+  color="primary"
+  href={product.link}
+  target="_blank"
+  rel="noopener noreferrer"
+  sx={{
+    backgroundColor: '#36d286',
+    textTransform: 'none',
+    '&:hover': {
+      backgroundColor: '#2bb673',
+    },
+  }}
+>
+  To {product.store}
+</Button>
 
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => setDialogOpen(true)}
-              sx={{ textTransform: 'none', px: 4, py: 1 }}
-            >
-              Add to Configuration
-            </Button>
+<Button
+  variant="contained"
+  color="primary"
+  onClick={() => setDialogOpen(true)}
+  sx={{
+    backgroundColor: '#36d286',
+    textTransform: 'none',
+    '&:hover': {
+      backgroundColor: '#2bb673',
+    },
+  }}
+>
+  Add to Configuration
+</Button>
           </Box>
         </Box>
       </Box>
@@ -209,26 +222,31 @@ const ProductDetailsPage = () => {
 
         {videosLoading && <CircularProgress />}
 
-        {!videosLoading && videos.length === 0 && (
-          <Typography>Review not found</Typography>
-        )}
+        {!videosLoading && videos.length === 0 && <Typography>Review not found</Typography>}
 
         <Grid container spacing={2}>
           {videos.map((video) => (
             <Grid item xs={12} sm={6} md={3} key={video.id.videoId}>
               <Card
-                sx={{ cursor: 'pointer' }}
-                onClick={() => window.open(`https://www.youtube.com/watch?v=${video.id.videoId}`, '_blank')}
+                sx={{
+                  cursor: 'pointer',
+                  borderRadius: '8px 8px 0 0',
+                  objectFit: 'contain',
+                }}
+                onClick={() =>
+                  window.open(`https://www.youtube.com/watch?v=${video.id.videoId}`, '_blank')
+                }
               >
                 <CardMedia
                   component="img"
                   height="140"
+                  width="140"
                   image={video.snippet.thumbnails.high.url}
                   alt={video.snippet.title}
                 />
                 <CardContent>
                   <Typography variant="body2" noWrap>
-                    {video.snippet.title}
+                    {truncateText(video.snippet.title, 25)}
                   </Typography>
                 </CardContent>
               </Card>
@@ -257,7 +275,10 @@ const ProductDetailsPage = () => {
             </Select>
           </FormControl>
           {addMessage && (
-            <Typography sx={{ mt: 2 }} color={addMessage.includes("Failed") ? "error" : "success.main"}>
+            <Typography
+              sx={{ mt: 2 }}
+              color={addMessage.includes('Failed') ? 'error' : 'success.main'}
+            >
               {addMessage}
             </Typography>
           )}
@@ -269,7 +290,7 @@ const ProductDetailsPage = () => {
             onClick={handleAddProductToConfig}
             disabled={!selectedConfig || addLoading}
           >
-            {addLoading ? "Adding..." : "Add"}
+            {addLoading ? 'Adding...' : 'Add'}
           </Button>
         </DialogActions>
       </Dialog>

@@ -22,6 +22,10 @@ const ProductService = {
   getProductById(id) {
   return axios.get(`/product/${id}`);
   },
+  
+  getRandomProducts: () => {
+    return axios.get("/products/random");
+  },
 };
 
 export default ProductService;

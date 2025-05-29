@@ -1,6 +1,5 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { Link, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -16,6 +15,7 @@ import storageIcon from '../assets/storage.png';
 import memoryIcon from '../assets/ram.png';
 import powersupplyIcon from '../assets/power supply.png';
 import ThemeToggleButton from './ThemeToggleButton';
+import logo from '../assets/logo.png'
 
 const navLinks = [
   { label: 'GPU', path: '/gpus' },
@@ -65,11 +65,13 @@ const Header = () => {
   return (
     <AppBar position="static" className="AppBar">
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h6" component="div">
-          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-            PCShops
-          </Link>
-        </Typography>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <img
+            src={logo}
+            alt="PCShops Logo"
+            style={{ height: 65, width: 200}}
+          />
+        </Link>
 
         <Box sx={{ display: 'flex', gap: 2 }}>
           {navLinks.map((link) => {
