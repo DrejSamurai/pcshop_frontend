@@ -188,11 +188,7 @@ const PCBuilder: React.FC = () => {
             ))}
           </Select>
         </FormControl>
-        <Button variant="outlined" onClick={handleExportPDF}>
-          Export PDF
-        </Button>
       </Box>
-
       <TableContainer className="pc-builder-container">
         <Paper className="pc-builder-paper">
           <Table className="pc-builder-table">
@@ -249,6 +245,12 @@ const PCBuilder: React.FC = () => {
           </Table>
         </Paper>
       </TableContainer>
+
+   <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+    <Button variant="contained" onClick={handleExportPDF}>
+      EXPORT PDF
+    </Button>
+  </Box>
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Create New Configuration</DialogTitle>
