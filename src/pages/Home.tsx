@@ -19,6 +19,8 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
+      console.log('localStorage token:', localStorage.getItem('token'));
+  console.log('sessionStorage token:', sessionStorage.getItem('token'));
     const fetchRandomProducts = async () => {
       try {
         const response = await ProductService.getRandomProducts();
@@ -27,6 +29,7 @@ function Home() {
         console.error("Error fetching random products:", error);
       }
     };
+
 
     fetchRandomProducts();
   }, []);

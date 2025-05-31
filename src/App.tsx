@@ -7,8 +7,8 @@ import StoragePage from './pages/products/StoragePage';
 import ProductDetailsPage from './pages/products/ProductDetailsPage';
 import { CustomThemeProvider } from './theme/ThemeContext';
 import PCBuilderPage from './pages/PCBuilder';
-import LoginPage from './pages/login';
-import Register from './pages/register';
+import LoginPage from './pages/authentication/login';
+import Register from './pages/authentication/register';
 import CpuPage from './pages/products/CpuPage';
 import MotherboardPage from './pages/products/MotherboardPage';
 import CoolerPage from './pages/products/CoolerPage';
@@ -22,14 +22,14 @@ function App() {
   <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />   
-        <Route path='gpus'  element={<GpuPage/>} />
-        <Route path='cpus'  element={<CpuPage/>} />
-        <Route path='motherboards'  element={<MotherboardPage/>} />
-        <Route path='coolers'  element={<CoolerPage/>} />
-        <Route path='storage'  element={<StoragePage/>} />
-         <Route path='cases'  element={<CasePage/>} />
-          <Route path='memory'  element={<MemoryPage/>} />
-          <Route path='powersupply'  element={<PowerSupplyPage/>} />
+        <Route path='gpu'  element={<GpuPage/>} />
+        <Route path='cpu'  element={<CpuPage/>} />
+        <Route path='motherboard'  element={<MotherboardPage/>} />
+        <Route path='cooler'  element={<CoolerPage/>} />
+        <Route path='hard-drive'  element={<StoragePage/>} />
+         <Route path='case'  element={<CasePage/>} />
+          <Route path='ram'  element={<MemoryPage/>} />
+          <Route path='power-supply'  element={<PowerSupplyPage/>} />
          <Route path='pcbuilder' element={<PCBuilderPage/>}/>
          <Route path="/product/:id" element={<ProductDetailsPage />} />
       </Route>

@@ -1,4 +1,3 @@
-// PCBuilder.tsx
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -19,9 +18,9 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Typography,
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
+import { useNavigate } from "react-router-dom"; 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import ConfigurationService from "../services/ConfigurationService";
@@ -57,6 +56,7 @@ const PCBuilder: React.FC = () => {
   const token = localStorage.getItem("token") || "";
   const user = decodeJWT(token);
   const userID = user?.sub ? Number(user.sub) : null;
+  const navigate = useNavigate(); 
 
   const [configID, setConfigID] = useState<number | null>(null);
   const [components, setComponents] = useState<ComponentRow[]>(initialComponents);
@@ -70,7 +70,7 @@ const PCBuilder: React.FC = () => {
       try {
         if (userID) {
           const data = await ConfigurationService.getByUser(userID);
-          setConfigurations(data);
+          setConfigurations(data ?? []);
         }
       } catch (err) {
         console.error("Error loading configurations:", err);
@@ -96,7 +96,11 @@ const PCBuilder: React.FC = () => {
   };
 
   const handleAddComponent = (index: number) => {
-    alert("Add component functionality to be implemented.");
+    const component = components[index].component.toLowerCase();
+
+    const route = `/${component.replace(/\s+/g, "-")}`;
+
+    navigate(route); 
   };
 
   const handleRemove = (index: number) => {
@@ -150,13 +154,12 @@ const PCBuilder: React.FC = () => {
     const body = components.map((row) => [
       row.component,
       row.product ? row.product.title : "-",
-      row.product?.store || "-", 
+      row.product?.store || "-",
       row.product ? `${row.product.price}` : "-",
     ]);
 
     const totalPrice = getTotalPrice();
-
-    body.push(["", "", "Total", `${totalPrice} den`]);
+    body.push(["", "", "Total", `${totalPrice} ден`]);
 
     autoTable(doc, {
       head,
@@ -169,28 +172,35 @@ const PCBuilder: React.FC = () => {
   };
 
   return (
-    <Box flexGrow={1} display="flex" flexDirection="column" alignItems="center">
-      <Box textAlign="center" mb={2} display="flex" gap={2} alignItems="center">
-        <Button variant="contained" color="primary" onClick={() => setDialogOpen(true)}>
+    <Box flexGrow={1} display="flex" flexDirection="column" alignItems="center" p={2}>
+      <Box display="flex" justifyContent="flex-end" gap={2} width="100%" maxWidth="1200px" mb={2}>
+        <Button variant="contained" className="customButton" onClick={() => setDialogOpen(true)}>
           Create New Configuration
         </Button>
         <FormControl size="small" sx={{ minWidth: 200 }}>
-          <InputLabel>Select Configuration</InputLabel>
-          <Select
-            value={selectedConfigID}
-            label="Select Configuration"
-            onChange={handleSelectConfig}
-          >
-            {configurations.map((cfg) => (
-              <MenuItem key={cfg.id} value={cfg.id.toString()}>
-                {cfg.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+  <InputLabel>Select Configuration</InputLabel>
+  <Select
+    value={selectedConfigID}
+    label="Select Configuration"
+    onChange={handleSelectConfig}
+  >
+    {configurations.length === 0 ? (
+      <MenuItem disabled>
+        <em>No configurations found</em>
+      </MenuItem>
+    ) : (
+      configurations.map((cfg) => (
+        <MenuItem key={cfg.id} value={cfg.id.toString()}>
+          {cfg.name}
+        </MenuItem>
+      ))
+    )}
+  </Select>
+</FormControl>
       </Box>
-      <TableContainer className="pc-builder-container">
-        <Paper className="pc-builder-paper">
+
+      <Box width="100%" maxWidth="1200px">
+        <TableContainer component={Paper} className="pc-builder-container">
           <Table className="pc-builder-table">
             <TableHead>
               <TableRow className="pc-builder-header-row">
@@ -213,6 +223,7 @@ const PCBuilder: React.FC = () => {
                         onClick={() => handleAddComponent(index)}
                         variant="contained"
                         size="small"
+                        className="customButton"
                       >
                         + ADD Component
                       </Button>
@@ -243,14 +254,14 @@ const PCBuilder: React.FC = () => {
               </TableRow>
             </TableBody>
           </Table>
-        </Paper>
-      </TableContainer>
+        </TableContainer>
 
-   <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
-    <Button variant="contained" onClick={handleExportPDF}>
-      EXPORT PDF
-    </Button>
-  </Box>
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Button variant="contained" className="customButton" onClick={handleExportPDF}>
+            Export to PDF
+          </Button>
+        </Box>
+      </Box>
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Create New Configuration</DialogTitle>
@@ -268,6 +279,7 @@ const PCBuilder: React.FC = () => {
           <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
           <Button
             variant="contained"
+            className="customButton"
             onClick={handleCreateConfig}
             disabled={!newConfigName.trim()}
           >

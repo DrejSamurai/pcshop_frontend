@@ -1,0 +1,7 @@
+.login-background {
+  background: radial-gradient(circle at center, #c9ffe5, #2fbc78 50%, #0f172a 100%);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 64px; 
+}

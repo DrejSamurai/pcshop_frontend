@@ -14,18 +14,19 @@ import caseIcon from '../assets/case.png';
 import storageIcon from '../assets/storage.png';
 import memoryIcon from '../assets/ram.png';
 import powersupplyIcon from '../assets/power supply.png';
+import buildIcon from '../assets/pc-build.png';
 import ThemeToggleButton from './ThemeToggleButton';
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.png';
 
 const navLinks = [
-  { label: 'GPU', path: '/gpus' },
-  { label: 'CPU', path: '/cpus' },
-  { label: 'Motherboard', path: '/motherboards' },
-  { label: 'Cooler', path: '/coolers' },
-  { label: 'Case', path: '/cases' },
-  { label: 'Storage', path: '/storage' },
-  { label: 'Memory', path: '/memory' },
-  { label: 'Power Supply', path: '/powersupply' },
+  { label: 'GPU', path: '/gpu' },
+  { label: 'CPU', path: '/cpu' },
+  { label: 'Motherboard', path: '/motherboard' },
+  { label: 'Cooler', path: '/cooler' },
+  { label: 'Case', path: '/case' },
+  { label: 'Storage', path: '/hard-drive' },
+  { label: 'Memory', path: '/ram' },
+  { label: 'Power Supply', path: '/power-supply' },
 ];
 
 const iconMap: Record<string, string> = {
@@ -37,6 +38,7 @@ const iconMap: Record<string, string> = {
   storage: storageIcon,
   memory: memoryIcon,
   powersupply: powersupplyIcon,
+  buildcomputer: buildIcon, // 🔧 Add this line
 };
 
 const getIconSrc = (label: string): string | undefined => {
@@ -55,26 +57,23 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
-    navigate('/');
+    navigate('/login');
   };
 
-  const handleBuildComputer = () => {
-    navigate('/pcbuilder')
-  }
+  const authenticatedLinks = [
+    ...navLinks,
+    { label: 'Build Computer', path: '/pcbuilder' }, 
+  ];
 
   return (
     <AppBar position="static" className="AppBar">
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
-          <img
-            src={logo}
-            alt="PCShops Logo"
-            style={{ height: 65, width: 200}}
-          />
+        <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <img src={logo} alt="PCShops Logo" style={{ height: 65, width: 200 }} />
         </Link>
 
         <Box sx={{ display: 'flex', gap: 2 }}>
-          {navLinks.map((link) => {
+          {(isLoggedIn ? authenticatedLinks : navLinks).map((link) => {
             const iconSrc = getIconSrc(link.label);
             return (
               <Button
@@ -82,7 +81,12 @@ const Header = () => {
                 color="inherit"
                 component={Link}
                 to={link.path}
-                sx={{ textTransform: 'none', display: 'flex', alignItems: 'center', gap: 1 }}
+                sx={{
+                  textTransform: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                }}
               >
                 {iconSrc && (
                   <img
@@ -103,18 +107,6 @@ const Header = () => {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {isLoggedIn ? (
-            <Button
-              variant="contained"
-              className="customButton"
-              onClick={handleBuildComputer}
-              sx={{ textTransform: 'none' }}
-            >
-              Build Computer
-            </Button>
-          ) : (
-          <></>
-          )}
           <ThemeToggleButton />
           {isLoggedIn ? (
             <Button

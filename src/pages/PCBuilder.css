@@ -2,6 +2,7 @@
   padding: 1rem;
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .pc-builder-paper {
@@ -39,4 +40,14 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-bottom: 20;
+}
+
+.customButton {
+  background-color: #36d286 !important;
+  text-transform: none;
+}
+
+.customButton:hover {
+  background-color: #2bb673 !important;
 }

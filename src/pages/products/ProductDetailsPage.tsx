@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ProductService from '../../services/ProductsService';
 import ConfigurationService from '../../services/ConfigurationService';
@@ -33,7 +33,8 @@ const ProductDetailsPage = () => {
   const [selectedConfig, setSelectedConfig] = useState<string>('');
   const [addLoading, setAddLoading] = useState(false);
   const [addMessage, setAddMessage] = useState<string | null>(null);
-
+  const navigate = useNavigate(); 
+  
   const token = localStorage.getItem('token') || '';
   const user = token ? JSON.parse(atob(token.split('.')[1])) : null;
   const userID = user?.sub ? Number(user.sub) : null;
@@ -95,6 +96,7 @@ const ProductDetailsPage = () => {
       );
       setAddMessage(response.message || 'Product added successfully.');
       setDialogOpen(false);
+      navigate('/pcbuilder')
     } catch (error) {
       console.error('Failed to add product to configuration', error);
       setAddMessage('Failed to add product to configuration.');
@@ -214,7 +216,6 @@ const ProductDetailsPage = () => {
         </Box>
       </Box>
 
-      {/* YouTube Review Videos */}
       <Box sx={{ mt: 6 }}>
         <Typography variant="h6" gutterBottom>
           Reviews on YouTube
@@ -255,7 +256,6 @@ const ProductDetailsPage = () => {
         </Grid>
       </Box>
 
-      {/* Add to Configuration Dialog */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Select Configuration</DialogTitle>
         <DialogContent>
