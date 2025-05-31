@@ -119,7 +119,6 @@ const ProductDetailsPage = () => {
         mx: 'auto',
       }}
     >
-      {/* Product Info */}
       <Box
         sx={{
           display: 'flex',
@@ -128,7 +127,6 @@ const ProductDetailsPage = () => {
           alignItems: { xs: 'flex-start', md: 'flex-start' },
         }}
       >
-        {/* Left Side: Image + Description */}
         <Box
           sx={{
             flexBasis: { md: '50%' },
@@ -157,7 +155,6 @@ const ProductDetailsPage = () => {
           </Typography>
         </Box>
 
-        {/* Right Side: Other product details */}
         <Box
           sx={{
             flex: 1,
