@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import './styles/filter.css'
 
-const categories = ['GPU', 'CPU', 'Motherboard', 'PowerSupply', 'Case', 'Memory', 'Storage'];
 
 interface Filters {
   category: string;
@@ -44,16 +43,6 @@ const ProductFilterSidebar: React.FC<Props> = ({
   title,
   onFilterChange,
 }) => {
-  const handleCategoryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    onFilterChange({
-      category: event.target.value as string,
-      minPrice,
-      maxPrice,
-      manufacturer: selectedManufacturer,
-      store: selectedStore,
-      title,
-    });
-  };
 
   const handlePriceChange = (_: Event, newValue: number | number[]) => {
     const [min, max] = newValue as number[];

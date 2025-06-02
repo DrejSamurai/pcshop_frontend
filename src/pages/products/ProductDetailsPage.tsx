@@ -1,14 +1,12 @@
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ProductService from '../../services/ProductsService';
 import ConfigurationService from '../../services/ConfigurationService';
-import { searchYouTube } from '../../services/YouTubeService';
 import {
   Box,
   Typography,
   CircularProgress,
   Button,
-  Grid,
   Card,
   CardMedia,
   CardContent,
@@ -21,6 +19,8 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
+import { searchYouTube } from '../../services/youtubeService';
+import Grid from '@mui/material/Grid';
 
 const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -224,6 +224,7 @@ const ProductDetailsPage = () => {
 
         <Grid container spacing={2}>
           {videos.map((video) => (
+            // @ts-expect-error: MUI typing issue, renders fine    
             <Grid item xs={12} sm={6} md={3} key={video.id.videoId}>
               <Card
                 sx={{
