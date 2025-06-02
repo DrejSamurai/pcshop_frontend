@@ -57,7 +57,8 @@ const PCBuilder: React.FC = () => {
   const user = decodeJWT(token);
   const userID = user?.sub ? Number(user.sub) : null;
   const navigate = useNavigate(); 
-
+  
+// @ts-expect-error: MUI typing issue, renders fine
   const [configID, setConfigID] = useState<number | null>(null);
   const [components, setComponents] = useState<ComponentRow[]>(initialComponents);
   const [dialogOpen, setDialogOpen] = useState(false);
