@@ -16,7 +16,7 @@ const ProductService = {
 
   getProxiedImageUrl: (imageUrl) => {
     if (!imageUrl) return "";
-    return `http://localhost:3000/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+    return `http://pcpartsmk.store:3000/image-proxy?url=${encodeURIComponent(imageUrl)}`;
   },
 
   getProductById(id) {
