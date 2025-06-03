@@ -30,11 +30,11 @@ function App() {
          <Route path='case'  element={<CasePage/>} />
           <Route path='ram'  element={<MemoryPage/>} />
           <Route path='power-supply'  element={<PowerSupplyPage/>} />
-         <Route path='pcbuilder' element={<PCBuilderPage/>}/>
+         <Route path='/pcbuilder' element={<PCBuilderPage/>}/>
          <Route path="/product/:id" element={<ProductDetailsPage />} />
       </Route>
-      <Route path='login' element={<LoginPage/>}/>
-      <Route path='register' element={<Register/>}/>
+      <Route path='/login' element={<LoginPage/>}/>
+      <Route path='/register' element={<Register/>}/>
     </Routes>
     </CustomThemeProvider>
   )
