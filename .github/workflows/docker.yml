@@ -35,6 +35,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /root/pcshop
+            cd /root/pcdelovimk
             docker-compose pull pcshop_frontend
             docker-compose up -d pcshop_frontend
