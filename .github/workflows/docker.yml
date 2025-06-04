@@ -13,14 +13,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install latest Docker CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          docker --version
+
       - name: Log in to DockerHub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/pcshop_frontend:latest .
 
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/pcshop_frontend:latest
+      - name: Push Docker image with retries
+        run: |
+          for i in {1..5}; do
+            docker push ${{ secrets.DOCKERHUB_USERNAME }}/pcshop_frontend:latest && break
+            echo "Retry docker push ($i)..."
+            sleep 10
+          done
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v0.1.9
