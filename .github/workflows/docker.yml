@@ -36,5 +36,5 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /root/pcdelovimk
-            docker-compose pull pcshop_frontend
-            docker-compose up -d pcshop_frontend
+            docker compose pull pcshop_frontend
+            docker compose up -d pcshop_frontend
