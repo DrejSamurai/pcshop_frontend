@@ -17,10 +17,14 @@ import { useNavigate } from "react-router-dom";
 function Home() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      setIsLoggedIn(!!token);
+    }, []);
 
   useEffect(() => {
-      console.log('localStorage token:', localStorage.getItem('token'));
-  console.log('sessionStorage token:', sessionStorage.getItem('token'));
     const fetchRandomProducts = async () => {
       try {
         const response = await ProductService.getRandomProducts();
@@ -85,7 +89,8 @@ function Home() {
         </Box>
 
         <Stack spacing={1} alignItems="center" mt={4}>
-          <Button
+          {isLoggedIn ? (
+                     <Button
             className="customButton"
             variant="contained"
             size="large"
@@ -101,6 +106,25 @@ function Home() {
           >
             Build your first pc here!
           </Button>
+                    ) : (
+                     <Button
+            className="customButton"
+            variant="contained"
+            size="large"
+            href="/register"
+            sx={{
+              borderRadius: "999px",
+              px: 3,
+              py: 1.5,
+              fontWeight: 500,
+              textTransform: "none",
+            }}
+            endIcon={<ArrowForwardIcon />}
+          >
+            Dont have an account? Register Now!
+          </Button>
+                    )}
+  
         </Stack>
       </Box>
 

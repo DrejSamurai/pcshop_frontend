@@ -38,7 +38,7 @@ const iconMap: Record<string, string> = {
   storage: storageIcon,
   memory: memoryIcon,
   powersupply: powersupplyIcon,
-  buildcomputer: buildIcon, // 🔧 Add this line
+  buildcomputer: buildIcon, 
 };
 
 const getIconSrc = (label: string): string | undefined => {
