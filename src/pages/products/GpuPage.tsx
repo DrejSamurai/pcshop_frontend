@@ -170,7 +170,7 @@ const GpuPage = () => {
                     >
                       <TableCell className="gpu-table-cell">
                         <img
-                          src={ProductService.getProxiedImageUrl(product.image)}
+                          src={product.image}
                           alt={product.title}
                           style={{ width: 100, height: 100, objectFit: 'cover' }}
                         />
