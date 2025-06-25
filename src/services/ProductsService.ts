@@ -1,5 +1,11 @@
 import axios from "./axios";
 
+const getProxiedImage = (originalUrl: string): string => {
+  if (!originalUrl) return '';
+  const strippedUrl = originalUrl.replace(/^https?:\/\//, '');
+  return `https://images.weserv.nl/?url=${strippedUrl}`;
+};
+
 const ProductService = {
   getFilteredProducts: (filters) => {
     return axios.get("/products", { params: filters });
@@ -26,6 +32,7 @@ const ProductService = {
   getRandomProducts: () => {
     return axios.get("/products/random");
   },
+  getProxiedImage,
 };
 
 export default ProductService;
