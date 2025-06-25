@@ -3,6 +3,17 @@ import Toolbar from '@mui/material/Toolbar';
 import { Link, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 import './styles/header.css';
 import { useEffect, useState } from 'react';
 
@@ -38,7 +49,7 @@ const iconMap: Record<string, string> = {
   storage: storageIcon,
   memory: memoryIcon,
   powersupply: powersupplyIcon,
-  buildcomputer: buildIcon, 
+  buildcomputer: buildIcon,
 };
 
 const getIconSrc = (label: string): string | undefined => {
@@ -48,6 +59,10 @@ const getIconSrc = (label: string): string | undefined => {
 const Header = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -62,8 +77,10 @@ const Header = () => {
 
   const authenticatedLinks = [
     ...navLinks,
-    { label: 'Build Computer', path: '/pcbuilder' }, 
+    { label: 'Build Computer', path: '/pcbuilder' },
   ];
+
+  const linksToRender = isLoggedIn ? authenticatedLinks : navLinks;
 
   return (
     <AppBar position="static" className="AppBar">
@@ -72,64 +89,110 @@ const Header = () => {
           <img src={logo} alt="PCShops Logo" style={{ height: 65, width: 200 }} />
         </Link>
 
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          {(isLoggedIn ? authenticatedLinks : navLinks).map((link) => {
-            const iconSrc = getIconSrc(link.label);
-            return (
-              <Button
-                key={link.label}
-                color="inherit"
-                component={Link}
-                to={link.path}
-                sx={{
-                  textTransform: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1,
-                }}
-              >
-                {iconSrc && (
-                  <img
-                    src={iconSrc}
-                    alt={link.label}
-                    style={{
-                      width: 50,
-                      height: 50,
-                      objectFit: 'contain',
-                      filter: 'invert(1) sepia(1) saturate(5) hue-rotate(180deg)',
-                    }}
-                  />
-                )}
-                {link.label}
-              </Button>
-            );
-          })}
-        </Box>
+        {!isMobile && (
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            {linksToRender.map((link) => {
+              const iconSrc = getIconSrc(link.label);
+              return (
+                <Button
+                  key={link.label}
+                  color="inherit"
+                  component={Link}
+                  to={link.path}
+                  sx={{
+                    textTransform: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                  }}
+                >
+                  {iconSrc && (
+                    <img
+                      src={iconSrc}
+                      alt={link.label}
+                      style={{
+                        width: 50,
+                        height: 50,
+                        objectFit: 'contain',
+                        filter: 'invert(1) sepia(1) saturate(5) hue-rotate(180deg)',
+                      }}
+                    />
+                  )}
+                  {link.label}
+                </Button>
+              );
+            })}
+          </Box>
+        )}
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <ThemeToggleButton />
-          {isLoggedIn ? (
-            <Button
-              variant="contained"
-              className="customButton"
-              onClick={handleLogout}
-              sx={{ textTransform: 'none' }}
-            >
-              Log Out
-            </Button>
+          {!isMobile ? (
+            isLoggedIn ? (
+              <Button
+                variant="contained"
+                className="customButton"
+                onClick={handleLogout}
+                sx={{ textTransform: 'none' }}
+              >
+                Log Out
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                className="customButton"
+                component={Link}
+                to="/login"
+                sx={{ textTransform: 'none' }}
+              >
+                Sign In
+              </Button>
+            )
           ) : (
-            <Button
-              variant="contained"
-              className="customButton"
-              component={Link}
-              to="/login"
-              sx={{ textTransform: 'none' }}
+            <IconButton
+              edge="end"
+              color="inherit"
+              onClick={() => setDrawerOpen(true)}
             >
-              Sign In
-            </Button>
+              <MenuIcon />
+            </IconButton>
           )}
         </Box>
       </Toolbar>
+
+      <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <Box sx={{ width: 250 }} role="presentation" onClick={() => setDrawerOpen(false)}>
+          <List>
+            {linksToRender.map((link) => (
+              <ListItem key={link.label} disablePadding>
+                <ListItemButton component={Link} to={link.path}>
+                  {getIconSrc(link.label) && (
+                    <ListItemIcon>
+                      <img
+                        src={getIconSrc(link.label)}
+                        alt={link.label}
+                        style={{ width: 30, height: 30 }}
+                      />
+                    </ListItemIcon>
+                  )}
+                  <ListItemText primary={link.label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+            <ListItem disablePadding>
+              {isLoggedIn ? (
+                <ListItemButton onClick={handleLogout}>
+                  <ListItemText primary="Log Out" />
+                </ListItemButton>
+              ) : (
+                <ListItemButton component={Link} to="/login">
+                  <ListItemText primary="Sign In" />
+                </ListItemButton>
+              )}
+            </ListItem>
+          </List>
+        </Box>
+      </Drawer>
     </AppBar>
   );
 };
