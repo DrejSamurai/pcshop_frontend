@@ -1,9 +1,8 @@
 import axios from "./axios";
 
 const getProxiedImage = (originalUrl: string): string => {
-  if (!originalUrl) return '';
-  const strippedUrl = originalUrl.replace(/^https?:\/\//, '');
-  return `https://images.weserv.nl/?url=${strippedUrl}`;
+  const strippedUrl = originalUrl.replace(/^https?:\/\//, '').replace(/^www\./, '');
+  return `https://images.weserv.nl/?url=${encodeURIComponent(strippedUrl)}`;
 };
 
 const ProductService = {
