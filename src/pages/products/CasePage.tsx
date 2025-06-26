@@ -20,6 +20,7 @@ import "./products.css";
 import anhochIcon from '../../assets/anhoch.png';
 import ddstoreIcon from '../../assets/ddstore.png';
 import zhirafa50Icon from '../../assets/zhirafa50.png';
+import caseImage from '../../assets/case.jpg';
 
 const iconMap: Record<string, string> = {
   anhoch: anhochIcon,
@@ -57,7 +58,7 @@ const CasePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ProductService.getManufacturers('GPU')
+    ProductService.getManufacturers('Case')
       .then(res => setManufacturer(res.data))
       .catch(console.error);
   }, []);
@@ -184,6 +185,10 @@ const CasePage = () => {
                         <img
                           src={getIconSrc(product.store)}
                           alt={product.store}
+                          onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = caseImage; 
+                         }}
                           style={{ width: 100, height: 100, objectFit: 'contain' }}
                         />
                       </TableCell>

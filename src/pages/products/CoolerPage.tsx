@@ -20,6 +20,7 @@ import "./products.css";
 import anhochIcon from '../../assets/anhoch.png';
 import ddstoreIcon from '../../assets/ddstore.png';
 import zhirafa50Icon from '../../assets/zhirafa50.png';
+import coolerImage from '../../assets/cooler.jpg';
 
 const iconMap: Record<string, string> = {
   anhoch: anhochIcon,
@@ -57,7 +58,7 @@ const CoolerPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ProductService.getManufacturers('GPU')
+    ProductService.getManufacturers('Cooler')
       .then(res => setManufacturer(res.data))
       .catch(console.error);
   }, []);
@@ -172,6 +173,10 @@ const CoolerPage = () => {
                         <img
                           src={ProductService.getProxiedImageUrl(product.image)}
                           alt={product.title}
+                          onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = coolerImage; 
+                         }}
                           style={{ width: 100, height: 100, objectFit: 'cover' }}
                         />
                       </TableCell>

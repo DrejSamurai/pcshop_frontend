@@ -57,7 +57,7 @@ const StoragePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ProductService.getManufacturers('GPU')
+    ProductService.getManufacturers('Hard Drive')
       .then(res => setManufacturer(res.data))
       .catch(console.error);
   }, []);

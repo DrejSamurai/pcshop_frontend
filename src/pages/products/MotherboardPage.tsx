@@ -20,6 +20,7 @@ import "./products.css";
 import anhochIcon from '../../assets/anhoch.png';
 import ddstoreIcon from '../../assets/ddstore.png';
 import zhirafa50Icon from '../../assets/zhirafa50.png';
+import mbImage from '../../assets/motherboard.jpg';
 
 const iconMap: Record<string, string> = {
   anhoch: anhochIcon,
@@ -57,7 +58,7 @@ const MotherboardPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ProductService.getManufacturers('GPU')
+    ProductService.getManufacturers('Motherboard')
       .then(res => setManufacturer(res.data))
       .catch(console.error);
   }, []);
@@ -172,6 +173,10 @@ const MotherboardPage = () => {
                         <img
                           src={ProductService.getProxiedImageUrl(product.image)}
                           alt={product.title}
+                           onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = mbImage; 
+                         }}
                           style={{ width: 100, height: 100, objectFit: 'cover' }}
                         />
                       </TableCell>
