@@ -20,6 +20,7 @@ import "./products.css";
 import anhochIcon from '../../assets/anhoch.png';
 import ddstoreIcon from '../../assets/ddstore.png';
 import zhirafa50Icon from '../../assets/zhirafa50.png';
+import gpuImage from '../../assets/gpu.jpg';
 
 const iconMap: Record<string, string> = {
   anhoch: anhochIcon,
@@ -170,9 +171,14 @@ const GpuPage = () => {
                     >
                       <TableCell className="gpu-table-cell">
                         <img
-                          src={ProductService.getProxiedImage(product.image)}
+                          src={product.image}
                           alt={product.title}
-                          style={{ width: 100, height: 100, objectFit: 'cover' }}
+                           onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = gpuImage; 
+                         }}
+                          style={{ width: 100, height: 100, objectFit: 'cover' }
+                        }
                         />
                       </TableCell>
                       <TableCell className="gpu-table-cell">
