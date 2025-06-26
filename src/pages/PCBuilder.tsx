@@ -160,7 +160,7 @@ const PCBuilder: React.FC = () => {
     ]);
 
     const totalPrice = getTotalPrice();
-    body.push(["", "", "Total", `${totalPrice} ден`]);
+    body.push(["", "", "Total", `${totalPrice}`]);
 
     autoTable(doc, {
       head,
