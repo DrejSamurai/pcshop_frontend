@@ -20,7 +20,7 @@ import "./products.css";
 import anhochIcon from '../../assets/anhoch.png';
 import ddstoreIcon from '../../assets/ddstore.png';
 import zhirafa50Icon from '../../assets/zhirafa50.png';
-import psuImage from '../../assets/power supply.jpg';
+import psuImage from '../../assets/power-suply.jpg';
 
 const iconMap: Record<string, string> = {
   anhoch: anhochIcon,
