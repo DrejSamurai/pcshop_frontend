@@ -7,13 +7,20 @@ import "./styles/layout.css";
 const Layout = () => {
   return (
     <>
-     <div className="layout-background">
+      <Box
+      className="layout-background"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+      }}
+    >
       <Header />
-      <Box sx={{ mt: 2, mb: 2 }}>
+      <Box sx={{ flexGrow: 1, mt: 2, mb: 2 }}>
         <Outlet />
       </Box>
-      <Footer/>
-      </div>
+      <Footer />
+    </Box>
     </>
   );
 };

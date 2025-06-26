@@ -13,6 +13,7 @@ import {
   Typography,
   Pagination,
   TableSortLabel,
+  CircularProgress,
 } from '@mui/material';
 import ProductFilterSidebar from '../../components/ProductFilterSidebar';
 import "./products.css";
@@ -41,6 +42,7 @@ const MemoryPage = () => {
   const [store, setStore] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
   const pageSize = 10;
 
   const [filters, setFilters] = useState({
@@ -70,6 +72,7 @@ const MemoryPage = () => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     const backendFilters = {
       ...filters,
       manufacturer: filters.manufacturer.join(','),
@@ -86,7 +89,8 @@ const MemoryPage = () => {
         setProducts(payload.data || []);
         setTotalPages(Math.ceil((payload.totalCount || 0) / pageSize));
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [filters, page, sortField, sortDirection]);
 
   const handleSort = (field: SortField) => {
@@ -120,7 +124,11 @@ const MemoryPage = () => {
         </Box>
 
         <Box flexGrow={1}>
-          {products.length === 0 ? (
+          {loading ? (
+            <Box display="flex" justifyContent="center" alignItems="center" py={10}>
+              <CircularProgress size={60} />
+            </Box>
+          ) : products.length === 0 ? (
             <Typography align="center" sx={{ py: 8, fontSize: '1.2rem', fontWeight: 'bold' }}>
               No products found matching your filters!
             </Typography>
@@ -171,12 +179,12 @@ const MemoryPage = () => {
                     >
                       <TableCell className="gpu-table-cell">
                         <img
-                          src={ProductService.getProxiedImageUrl(product.image)}
+                          src={product.image}
                           alt={product.title}
-                           onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = ramImage; 
-                         }}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = ramImage;
+                          }}
                           style={{ width: 100, height: 100, objectFit: 'cover' }}
                         />
                       </TableCell>
@@ -204,7 +212,7 @@ const MemoryPage = () => {
             </TableContainer>
           )}
 
-          {totalPages > 1 && (
+          {totalPages > 1 && !loading && (
             <Box mt={4} display="flex" justifyContent="center">
               <Pagination count={totalPages} page={page} onChange={(_, v) => setPage(v)} />
             </Box>
