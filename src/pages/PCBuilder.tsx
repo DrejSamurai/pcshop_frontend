@@ -250,7 +250,7 @@ const PCBuilder: React.FC = () => {
                   <strong>Total:</strong>
                 </TableCell>
                 <TableCell colSpan={2}>
-                  <strong>{getTotalPrice()} ден</strong>
+                  <strong>{getTotalPrice()} den</strong>
                 </TableCell>
               </TableRow>
             </TableBody>
